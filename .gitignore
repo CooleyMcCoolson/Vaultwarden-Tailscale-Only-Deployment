@@ -1,0 +1,36 @@
+# Secrets and credentials
+.env
+*.token
+*.key
+secrets/
+admin_token.txt
+
+# Backups (these are large and should be stored separately)
+backups/
+*.tar.gz
+*.sql
+*.dump
+
+# Local development
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Personal vault notes (keep local only)
+.obsidian/

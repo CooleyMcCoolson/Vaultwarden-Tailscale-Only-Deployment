@@ -1,0 +1,45 @@
+http:
+  routers:
+    vaultwarden:
+      rule: "Host(`your-server.your-tailnet.ts.net`)"
+      service: vaultwarden-service
+      entryPoints:
+        - websecure
+      middlewares:
+        - vaultwarden-headers
+        - rate-limit
+      tls: {}
+
+  services:
+    vaultwarden-service:
+      loadBalancer:
+        servers:
+          - url: "http://vaultwarden:80"
+        passHostHeader: true
+
+  middlewares:
+    vaultwarden-headers:
+      headers:
+        sslRedirect: true
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        referrerPolicy: "no-referrer"
+        permissionsPolicy: "geolocation=(), microphone=(), camera=()"
+        customResponseHeaders:
+          X-Robots-Tag: "noindex, nofollow"
+        contentSecurityPolicy: "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none';"
+
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /config/your-server.your-tailnet.ts.net.crt
+        keyFile: /config/your-server.your-tailnet.ts.net.key
+  certificates:
+    - certFile: /config/your-server.your-tailnet.ts.net.crt
+      keyFile: /config/your-server.your-tailnet.ts.net.key
