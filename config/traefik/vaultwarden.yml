@@ -34,6 +34,12 @@ http:
           X-Robots-Tag: "noindex, nofollow"
         contentSecurityPolicy: "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none';"
 
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+        period: 1m
+
 tls:
   stores:
     default:

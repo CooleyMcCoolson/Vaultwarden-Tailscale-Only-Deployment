@@ -10,7 +10,9 @@
 # To generate: docker run --rm -it vaultwarden/server:alpine /vaultwarden hash --preset owasp
 ADMIN_TOKEN='$argon2id$v=19$m=65540,t=3,p=4$REPLACE_WITH_YOUR_HASHED_TOKEN'
 CONTAINER_NAME="vaultwarden"
-IMAGE="vaultwarden/server:1.32.5-alpine"
+# IMPORTANT: Pin image to SHA256 digest to prevent tag poisoning
+# To get digest: docker pull vaultwarden/server:1.32.5-alpine && docker inspect vaultwarden/server:1.32.5-alpine --format='{{index .RepoDigests 0}}'
+IMAGE="vaultwarden/server:1.32.5-alpine@sha256:76d46d32ba4120b022e0a69487f9fd79fc52e2765b1650c5c51a5dd912a3c288"
 DOMAIN="https://your-server.your-tailnet.ts.net"
 DATA_PATH="/mnt/cache_nvme/appdata/vaultwarden/data"
 GRAYLOG_HOST="YOUR_GRAYLOG_HOST:12201"  # Optional - remove --log-driver lines if not using
@@ -25,6 +27,7 @@ echo "[INFO] Deploying vaultwarden container..."
 docker run -d \
   --name=${CONTAINER_NAME} \
   --hostname=${CONTAINER_NAME} \
+  --user 99:100 \
   --network=traefik_proxy \
   -e PUID=99 \
   -e PGID=100 \

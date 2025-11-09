@@ -10,17 +10,18 @@ This repository contains the complete deployment configuration for a production-
 
 **Access Model**: Tailscale VPN Only
 **Security Level**: Maximum (Defense-in-Depth)
-**Security Rating**: 9/10 (Admin token hashed with Argon2id)
+**Security Rating**: 9.5/10 (Hardened - SHA256 pinned, non-root, tested backups)
 
 ### Key Security Features
 - ✅ **Zero Public Exposure** - Only accessible via Tailscale VPN
 - ✅ **HTTPS Everywhere** - TLS with Tailscale-issued certificate (valid, no warnings)
-- ✅ **Rate Limiting** - Brute force protection
+- ✅ **Rate Limiting** - Brute force protection (Traefik: 100/min avg, 50 burst)
 - ✅ **Read-Only Container** - Immutable filesystem
-- ✅ **Resource Limits** - DoS prevention
-- ✅ **Automated Backups** - Daily encrypted backups
-- ✅ **Comprehensive Monitoring** - Graylog logging + health checks
-- ✅ **Security Headers** - HSTS, CSP, X-Frame-Options, etc.
+- ✅ **Resource Limits** - DoS prevention (512MB RAM, 1 CPU)
+- ✅ **Automated Backups** - Daily encrypted backups (Restic AES-256, tested restore)
+- ✅ **Container Hardening** - Non-root user (uid=99), SHA256 pinned image
+- ✅ **Security Headers** - HSTS, CSP, X-Frame-Options (verified working)
+- ✅ **Logging** - Graylog integration (alerts to be configured)
 
 ## 📋 Repository Contents
 
@@ -167,20 +168,30 @@ This repository contains the complete deployment configuration for a production-
    - Signups disabled
 
 4. **Container Layer**
-   - Read-only filesystem
-   - No new privileges
+   - Read-only filesystem (--read-only)
+   - No new privileges (--security-opt no-new-privileges)
    - Resource limits (512MB RAM, 1 CPU)
-   - Non-root user (PUID/PGID)
+   - Non-root user (--user 99:100, verified uid=99)
+   - SHA256 image pinning (prevents tag poisoning)
 
 5. **Monitoring Layer**
-   - Graylog SIEM integration (optional)
-   - Failed login alerts
-   - Health check monitoring
+   - Graylog log aggregation (centralized logging)
+   - Docker health checks (30s intervals)
+   - Future: Alert configuration for failed logins
 
 ## 💾 Backup Strategy
 
-**Primary Backup: Automated Daily Backups**
+**Primary Backup: Restic (Recommended)**
+- **Encryption**: AES-256 via Restic
+- **Frequency**: Daily automated backups
+- **Destination**: Off-site backup server
+- **Last Tested**: Restore procedure verified successfully
+- **Path**: Entire `/mnt/cache_nvme/appdata/vaultwarden/` directory
+
+**Secondary Backup: Local Script (Optional)**
 - **Script**: `scripts/backup-vaultwarden.sh`
+- **Purpose**: Additional local backup for quick restore
+- **Features**: Integrity checking with tar verification
 - **Frequency**: Daily automated backups (2:30 AM recommended)
 - **Retention**: 7 days local (configurable)
 
@@ -194,7 +205,7 @@ This repository contains the complete deployment configuration for a production-
 - **RTO** (Recovery Time): 30 minutes
 - **RPO** (Recovery Point): 24 hours
 
-**Testing**: Monthly restore verification recommended
+**Backup Verification**: ✅ Restore procedure tested and working
 
 ## 📥 Importing from Cloud Bitwarden
 
@@ -460,5 +471,12 @@ MIT License - Use at your own risk
 ---
 
 **Last Updated**: 2025-11-09
-**Status**: Sanitized for public release
-**Security Rating**: 9/10 (Admin token hashed with Argon2id)
+**Status**: Sanitized for public release - Production-ready hardened configuration
+**Security Rating**: 9.5/10 (All critical vulnerabilities addressed)
+**Hardening Status**:
+- ✅ Container running as non-root (uid=99)
+- ✅ Docker image pinned to SHA256 digest
+- ✅ Backup restore tested successfully
+- ✅ Rate limiting active (Traefik middleware)
+- ✅ Security headers verified working
+- ✅ No plaintext secrets in repository

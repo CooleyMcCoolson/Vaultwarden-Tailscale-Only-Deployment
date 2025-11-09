@@ -37,4 +37,11 @@ else
 fi
 
 echo "[INFO] Backup completed successfully at $(date)"
+echo ""
+echo "================================================"
+echo "BACKUP STRATEGY:"
+echo "- PRIMARY: Restic (encrypted, daily to off-site)"
+echo "- SECONDARY: This local backup (quick restore)"
+echo "- Restic covers: /mnt/cache_nvme/appdata/vaultwarden/"
+echo "================================================"
 exit 0
