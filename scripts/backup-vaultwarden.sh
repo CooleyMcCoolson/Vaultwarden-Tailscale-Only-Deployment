@@ -4,8 +4,8 @@
 # Backs up entire data directory (includes SQLite DB + WAL files, attachments, sends, keys)
 
 BACKUP_DATE=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR="/mnt/cache_nvme/appdata/vaultwarden/backups"
-DATA_DIR="/mnt/cache_nvme/appdata/vaultwarden/data"
+BACKUP_DIR="/opt/vaultwarden/backups"  # Adjust for your system
+DATA_DIR="/opt/vaultwarden/data"
 
 echo "[INFO] Starting vaultwarden backup at $(date)"
 
@@ -42,6 +42,6 @@ echo "================================================"
 echo "BACKUP STRATEGY:"
 echo "- PRIMARY: Restic (encrypted, daily to off-site)"
 echo "- SECONDARY: This local backup (quick restore)"
-echo "- Restic covers: /mnt/cache_nvme/appdata/vaultwarden/"
+echo "- Restic covers: /opt/vaultwarden/"
 echo "================================================"
 exit 0

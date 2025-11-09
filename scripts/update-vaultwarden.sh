@@ -9,7 +9,7 @@
 set -e  # Exit on error
 
 VERSION="${1:-latest}"
-BACKUP_DIR="/mnt/cache_nvme/appdata/vaultwarden/backups"
+BACKUP_DIR="/opt/vaultwarden/backups"  # Adjust for your system
 # IMPORTANT: Replace this with your generated Argon2id hash!
 ADMIN_TOKEN='$argon2id$v=19$m=65540,t=3,p=4$REPLACE_WITH_YOUR_HASHED_TOKEN'
 
@@ -39,7 +39,7 @@ echo ""
 # Step 3: Create backup BEFORE updating
 echo "[3/8] Creating pre-update backup..."
 BACKUP_DATE=$(date +%Y%m%d_%H%M%S)
-tar -czf "${BACKUP_DIR}/pre-update-${BACKUP_DATE}.tar.gz" -C /mnt/cache_nvme/appdata/vaultwarden/data .
+tar -czf "${BACKUP_DIR}/pre-update-${BACKUP_DATE}.tar.gz" -C /opt/vaultwarden/data .
 echo "Backup created: pre-update-${BACKUP_DATE}.tar.gz"
 echo ""
 
@@ -69,7 +69,7 @@ docker run -d \
   --network=traefik_proxy \
   -e PUID=99 \
   -e PGID=100 \
-  -e TZ=America/New_York \
+  -e TZ=Etc/UTC \  # Change to your timezone (e.g., America/New_York, Europe/London)
   -e DOMAIN=https://your-server.your-tailnet.ts.net \
   -e SIGNUPS_ALLOWED=false \
   -e INVITATIONS_ALLOWED=true \
@@ -83,7 +83,7 @@ docker run -d \
   -e ADMIN_RATELIMIT_MAX_BURST=3 \
   -e ADMIN_RATELIMIT_SECONDS=300 \
   -p 127.0.0.1:8097:80 \
-  -v /mnt/cache_nvme/appdata/vaultwarden/data:/data:rw \
+  -v /opt/vaultwarden/data:/data:rw \
   --log-driver=gelf \
   --log-opt gelf-address=udp://YOUR_GRAYLOG_HOST:12201 \
   --log-opt tag=vaultwarden \
@@ -150,7 +150,7 @@ echo "2. Verify your passwords are accessible"
 echo "3. Test sync on mobile devices"
 echo "4. If anything is broken, rollback:"
 echo "   docker stop vaultwarden && docker rm vaultwarden"
-echo "   tar -xzf ${BACKUP_DIR}/pre-update-${BACKUP_DATE}.tar.gz -C /mnt/cache_nvme/appdata/vaultwarden/data"
+echo "   tar -xzf ${BACKUP_DIR}/pre-update-${BACKUP_DATE}.tar.gz -C /opt/vaultwarden/data"
 echo "   # Then redeploy old version"
 echo ""
-echo "Update log: $(date) - Updated to $VERSION" >> /mnt/cache_nvme/appdata/vaultwarden/update-log.txt
+echo "Update log: $(date) - Updated to $VERSION" >> /opt/vaultwarden/update-log.txt

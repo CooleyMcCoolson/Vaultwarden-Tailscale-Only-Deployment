@@ -61,7 +61,7 @@ This repository contains the complete deployment configuration for a production-
 
 3. **Create directories**:
    ```bash
-   mkdir -p /mnt/cache_nvme/appdata/vaultwarden/{data,backups,certs}
+   mkdir -p /opt/vaultwarden/{data,backups,certs}
    # Adjust path for your environment
    ```
 
@@ -186,7 +186,7 @@ This repository contains the complete deployment configuration for a production-
 - **Frequency**: Daily automated backups
 - **Destination**: Off-site backup server
 - **Last Tested**: Restore procedure verified successfully
-- **Path**: Entire `/mnt/cache_nvme/appdata/vaultwarden/` directory
+- **Path**: Entire `/opt/vaultwarden/` directory
 
 **Secondary Backup: Local Script (Optional)**
 - **Script**: `scripts/backup-vaultwarden.sh`

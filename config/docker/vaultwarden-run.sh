@@ -14,7 +14,7 @@ CONTAINER_NAME="vaultwarden"
 # To get digest: docker pull vaultwarden/server:1.32.5-alpine && docker inspect vaultwarden/server:1.32.5-alpine --format='{{index .RepoDigests 0}}'
 IMAGE="vaultwarden/server:1.32.5-alpine@sha256:76d46d32ba4120b022e0a69487f9fd79fc52e2765b1650c5c51a5dd912a3c288"
 DOMAIN="https://your-server.your-tailnet.ts.net"
-DATA_PATH="/mnt/cache_nvme/appdata/vaultwarden/data"
+DATA_PATH="/opt/vaultwarden/data"  # Adjust this path for your system
 GRAYLOG_HOST="YOUR_GRAYLOG_HOST:12201"  # Optional - remove --log-driver lines if not using
 
 # Stop and remove existing container (if any)
@@ -31,7 +31,7 @@ docker run -d \
   --network=traefik_proxy \
   -e PUID=99 \
   -e PGID=100 \
-  -e TZ=America/New_York \
+  -e TZ=Etc/UTC \  # Change to your timezone (e.g., America/New_York, Europe/London)
   -e DOMAIN=${DOMAIN} \
   -e SIGNUPS_ALLOWED=false \
   -e INVITATIONS_ALLOWED=true \

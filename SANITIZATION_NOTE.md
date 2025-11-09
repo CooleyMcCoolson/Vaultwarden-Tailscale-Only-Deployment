@@ -44,8 +44,10 @@ tailscale status
 
 ### 4. File Paths
 - [ ] Review all paths and update to match your environment:
-  - `/mnt/cache_nvme/appdata/vaultwarden/` → Your data directory
-  - `/mnt/user/appdata/traefik/config/` → Your Traefik config directory
+  - `/opt/vaultwarden/` → Your data directory
+    - Unraid example: `/mnt/user/appdata/vaultwarden/` or `/mnt/cache/appdata/vaultwarden/`
+    - Standard Linux: `/opt/vaultwarden/` or `/var/lib/vaultwarden/`
+  - Traefik config directory (varies by installation)
 
 ## Files That Need Updating
 
