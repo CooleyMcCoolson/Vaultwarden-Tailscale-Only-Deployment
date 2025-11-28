@@ -10,7 +10,7 @@ This repository contains the complete deployment configuration for a production-
 
 **Access Model**: Tailscale VPN Only
 **Security Level**: Maximum (Defense-in-Depth)
-**Security Rating**: 9.5/10 (Hardened - SHA256 pinned, non-root, tested backups)
+**Security**: Hardened - SHA256 pinned, non-root, tested backups
 
 ### Key Security Features
 - ✅ **Zero Public Exposure** - Only accessible via Tailscale VPN
